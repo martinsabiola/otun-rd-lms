@@ -172,7 +172,7 @@
   </div>
 
   <!-- GH BANNER -->
-  <div id="gh-banner" class="banner banner-info"><span class="sp"></span> Connecting to GitHub — martinsabiola/otun-rd-lms-data...</div>
+  <div id="gh-banner" class="banner banner-info"><span class="sp"></span> Connecting to GitHub — martinsabiola/otun-rd-lms...</div>
 
   <!-- TABS -->
   <div class="tabs">
@@ -237,7 +237,7 @@
 </div><!-- /app -->
 
 <script>
-const GH_URL = 'https://raw.githubusercontent.com/martinsabiola/otun-rd-lms-data/main/names.json';
+const GH_URL = 'https://raw.githubusercontent.com/martinsabiola/otun-rd-lms/main/names.json';
 
 const FALLBACK = {
   congregation: "OTUN RD", year: 2026,
@@ -332,7 +332,7 @@ function save(){
 async function reloadGH(){
   const ban=document.getElementById('gh-banner');
   ban.className='banner banner-info';
-  ban.innerHTML='<span class="sp"></span> Syncing from GitHub — martinsabiola/otun-rd-lms-data/names.json...';
+  ban.innerHTML='<span class="sp"></span> Syncing from GitHub — martinsabiola/otun-rd-lms/names.json...';
   try{
     const r=await fetch(GH_URL+'?t='+Date.now());
     if(!r.ok) throw new Error('HTTP '+r.status);

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTUN RD — LMS Part Assignment 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --primary: #4F46E5;
+    --primary-light: #EEF2FF;
+    --success: #16A34A;
+    --success-light: #DCFCE7;
+    --warning: #D97706;
+    --warning-light: #FEF3C7;
+    --danger: #DC2626;
+    --danger-light: #FEE2E2;
+    --info: #0284C7;
+    --info-light: #E0F2FE;
+    --border: #E5E7EB;
+    --bg: #F9FAFB;
+    --card: #FFFFFF;
+    --text: #111827;
+    --text-secondary: #6B7280;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .app { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+  /* Header */
+  .hdr { display: flex; align-items: center; gap: 14px; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+  .hdr-icon { width: 48px; height: 48px; background: var(--info-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--info); flex-shrink: 0; }
+  .hdr-title { font-size: 20px; font-weight: 700; color: var(--text); }
+  .hdr-sub { font-size: 13px; color: var(--text-secondary); margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .hdr-actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+  .b-blue { background: var(--info-light); color: var(--info); }
+  .b-green { background: var(--success-light); color: var(--success); }
+  .b-amber { background: var(--warning-light); color: var(--warning); }
+  .b-red { background: var(--danger-light); color: var(--danger); }
+  .b-live { background: var(--success-light); color: var(--success); }
+  .b-gh { background: #F3F4F6; color: #374151; border: 1px solid var(--border); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: #F3F4F6; padding: 4px; border-radius: var(--radius); }
+  .tab { flex: 1; padding: 8px 8px; font-size: 13px; font-weight: 500; border: none; background: transparent; cursor: pointer; border-radius: var(--radius-sm); color: var(--text-secondary); transition: all .15s; white-space: nowrap; }
+  .tab.active { background: #fff; color: var(--primary); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .tab:hover:not(.active) { background: #E5E7EB; }
+
+  /* Panels */
+  .panel { display: none; } .panel.active { display: block; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: #4338CA; }
+  .btn-info { background: var(--info-light); color: var(--info); }
+  .btn-info:hover { background: #BAE6FD; }
+  .btn-success { background: var(--success-light); color: var(--success); }
+  .btn-success:hover { background: #BBF7D0; }
+  .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-danger { background: var(--danger-light); color: var(--danger); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  /* Week nav */
+  .wknav { display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem; }
+  .wklbl { flex: 1; text-align: center; font-size: 15px; font-weight: 600; color: var(--text); }
+
+  /* Schedule */
+  .sec-header { font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; padding: 10px 0 5px; margin-top: 6px; border-top: 2px solid var(--border); }
+  .prow { display: grid; grid-template-columns: 28px 1fr 160px 34px; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #F3F4F6; }
+  .prow:last-child { border-bottom: none; }
+  .pnum { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .ptitle { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pmeta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .asel { font-size: 12px; padding: 5px 7px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; color: var(--text); width: 100%; outline: none; }
+  .asel:focus { border-color: var(--primary); }
+  .asel.unc { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
+  .asel.con { border-color: var(--success); background: var(--success-light); color: var(--success); }
+  .ib { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; cursor: pointer; color: var(--text-secondary); transition: all .15s; }
+  .ib:hover { background: var(--bg); }
+  .ib.del:hover { background: var(--danger-light); color: var(--danger); border-color: var(--danger); }
+
+  /* Name pools */
+  .role-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .role-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+  .role-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .role-body { padding: 0 16px 12px; }
+  .name-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #F9FAFB; }
+  .name-row:last-child { border-bottom: none; }
+  .name-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .tgl { width: 32px; height: 18px; border-radius: 20px; border: none; cursor: pointer; position: relative; flex-shrink: 0; transition: background .2s; }
+  .tgl.on { background: var(--success); }
+  .tgl.off { background: #D1D5DB; }
+  .tdot { position: absolute; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: left .2s; }
+  .tgl.on .tdot { left: 17px; }
+  .tgl.off .tdot { left: 3px; }
+  .add-row { display: flex; gap: 8px; padding: 10px 0 4px; }
+  .add-inp { flex: 1; font-size: 13px; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); outline: none; }
+  .add-inp:focus { border-color: var(--primary); }
+
+  /* Stats */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .stat-val { font-size: 28px; font-weight: 700; color: var(--primary); }
+  .stat-lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Year list */
+  .yr-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--radius-sm); cursor: pointer; transition: background .1s; }
+  .yr-row:hover { background: var(--bg); }
+  .yr-row.current { background: var(--info-light); }
+  .pw { background: #E5E7EB; border-radius: 20px; height: 6px; overflow: hidden; width: 80px; }
+  .pb { height: 6px; border-radius: 20px; background: var(--primary); }
+
+  /* Notifications */
+  .notif-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: var(--bg); border-radius: var(--radius); margin-bottom: 8px; border: 1px solid var(--border); }
+  .notif-icon { width: 38px; height: 38px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  pre.msg { font-size: 12px; background: #fff; border: 1px solid var(--border); padding: 10px; border-radius: var(--radius-sm); margin-top: 8px; white-space: pre-wrap; font-family: monospace; color: var(--text); }
+
+  /* Banners */
+  .banner { padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  .banner-info { background: var(--info-light); color: var(--info); }
+  .banner-success { background: var(--success-light); color: var(--success); }
+  .banner-danger { background: var(--danger-light); color: var(--danger); }
+  .banner-warning { background: var(--warning-light); color: var(--warning); }
+
+  /* Spinner */
+  .sp { display: inline-block; width: 14px; height: 14px; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Misc */
+  .stag { font-size: 10px; padding: 1px 6px; border-radius: 20px; font-weight: 600; margin-left: 4px; }
+  .lr { text-align: center; padding: 24px; color: var(--text-secondary); font-size: 13px; }
+  input, select { font-family: inherit; }
+  @media(max-width:600px) {
+    .prow { grid-template-columns: 26px 1fr 120px 30px; }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .hdr-actions { display: none; }
+    .tabs .tab { font-size: 11px; padding: 7px 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-icon"><i class="ti ti-calendar-event"></i></div>
+    <div>
+      <div class="hdr-title">OTUN RD — LMS Part Assignment 2026</div>
+      <div class="hdr-sub">
+        <span class="badge b-live"><i class="ti ti-antenna-bars-5"></i> JW.org Live</span>
+        <span class="badge b-gh"><i class="ti ti-brand-github"></i> GitHub Data</span>
+        <span class="badge b-blue"><i class="ti ti-calendar"></i> Thursdays 2026</span>
+        <span class="badge b-amber" id="pending-badge"><i class="ti ti-clock"></i> —</span>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-outline btn-sm" onclick="reloadGH()"><i class="ti ti-refresh"></i> Sync GitHub</button>
+      <button class="btn btn-outline btn-sm" onclick="exportSched()"><i class="ti ti-download"></i> Export</button>
+    </div>
+  </div>
+
+  <!-- GH BANNER -->
+  <div id="gh-banner" class="banner banner-info"><span class="sp"></span> Connecting to GitHub — martinsabiola/otun-rd-lms-data...</div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="sw('schedule',this)"><i class="ti ti-layout-list"></i> Schedule</button>
+    <button class="tab" onclick="sw('names',this)"><i class="ti ti-users"></i> Name Pools</button>
+    <button class="tab" onclick="sw('notifications',this)"><i class="ti ti-bell"></i> Notifications</button>
+    <button class="tab" onclick="sw('overview',this)"><i class="ti ti-chart-bar"></i> Overview</button>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="panel-schedule" class="panel active">
+    <div class="wknav">
+      <button class="btn btn-outline btn-sm" onclick="prevW()"><i class="ti ti-chevron-left"></i></button>
+      <div class="wklbl" id="wklbl">—</div>
+      <button class="btn btn-outline btn-sm" onclick="nextW()"><i class="ti ti-chevron-right"></i></button>
+      <button class="btn btn-info btn-sm" id="fetch-btn" onclick="fetchAI()"><i class="ti ti-refresh"></i> Fetch JW.org</button>
+    </div>
+    <div id="wk-container"><div class="card"><div class="lr"><span class="sp"></span> Loading...</div></div></div>
+  </div>
+
+  <!-- NAME POOLS -->
+  <div id="panel-names" class="panel">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-database"></i> Name Pools — OTUN RD 2026
+        <span class="badge b-gh" style="margin-left:auto"><i class="ti ti-brand-github"></i> <span id="gh-sync-time">not synced</span></span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:14px"><span id="total-names-text">—</span> members loaded · Treasures = Elders + Ministerial Servants</p>
+      <div id="pools-list"></div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div id="panel-notifications" class="panel">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bell-ringing"></i> Notifications — Current Week</div>
+      <div style="display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
+        <label style="font-size:13px;color:var(--text-secondary)">Format:</label>
+        <select id="nfmt" class="asel" style="width:140px" onchange="renderNotifs()">
+          <option value="whatsapp">📱 WhatsApp</option>
+          <option value="email">📧 Email</option>
+          <option value="sms">💬 SMS</option>
+        </select>
+      </div>
+      <div id="notif-list"></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="panel-overview" class="panel">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val">52</div><div class="stat-lbl">Total Thursdays</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-assigned">—</div><div class="stat-lbl">Parts Assigned</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-names">—</div><div class="stat-lbl">Active Members</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-pending">—</div><div class="stat-lbl">Pending</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-list-check"></i> All 52 Thursdays — 2026</div>
+      <div id="yr-list"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+const GH_URL = 'https://raw.githubusercontent.com/martinsabiola/otun-rd-lms-data/main/names.json';
+
+const FALLBACK = {
+  congregation: "OTUN RD", year: 2026,
+  roles: {
+    ministerial_servant: ["NATHAN OMADUDU","MONDAY EDNIYI","GODWIN SAMSON"],
+    elder: ["NELSON OJEI","MICHAEL ADEDAYO","MICHAEL SAMSON","CHONOSO EKESI","SEGUN ADEDIRAN","MARTINS ABIOLA","WILLIAMS OFIAVWE","WILLIAMS UNA"],
+    chairman: ["NELSON OJEI","MICHAEL SAMSON","CHONOSO EKESI","WILLIAMS UNA","SEGUN ADEDIRAN"],
+    treasures_digging: ["NELSON OJEI","MICHAEL ADEDAYO","MICHAEL SAMSON","CHONOSO EKESI","SEGUN ADEDIRAN","MARTINS ABIOLA","WILLIAMS OFIAVWE","WILLIAMS UNA","NATHAN OMADUDU","MONDAY EDNIYI","GODWIN SAMSON"],
+    bible_reading: ["INTEGRITY ADEDIRAN","ABEL NWACHUKWU","AKINWALE FERNANDEZ","MATHEW UKATO","MAYOWA OLUGENTLE","DANIEL OMADUDU","MAXWEL OKPOKPO","DAMILARE LAWAL","BRIGHT ESIULO","TIMOFE ASHIBOGWU","DAVID ESIULO","EMEKA JUSTICE","BENIAH ETUMUDO","MICHAEL BASSEY","DIVINE OZUEM","DOLA EKANEM","DOLU EKANEM","DUMININU EKANEM","JOEL OSAWEME","CHRISTIAN ADESHINA","DAVID CHIMAOBI","SUNDAY RAPHAEL","JACOB AGEMA","JOSEPH APUAMAGA","ROYALTY OKERE","RICHARD ABOSHEMI","GERALD GOKA","WISDOM MESHACH","UWANNA MESHACH","PUAL ADEDIRAN"],
+    apply_ministry: ["ONOME OJEI","JOAN OJEI","BLESSING KALU","CHINYERE SAMSON","ALEX IDU","MARIAM ADEDIRAN","KINDNESS ADEDIRAN","FUNKE LAWAL","RACHAEL LAWAL","BOLA OMIDINA","HAPINESS SAMSON","EUNICE OFIAVWE","OMENA OFIAVWE","ELIZABETH WAHAB","LILIAN OKERE","MERCY NWACHUKWU","JOAN NWACHUKWU","ESTHER NWACHUKWU","OLABISI ADESHINA","MERCY ADESHINA","ADENIKE ADEDAYO","HOPE OMADUDU","MAGRETH OMADUDU","DEBORAH OKPOKPO","JOY MASHACH","JOY ESIULO","UCHEOMA ESIULO","PRECIOUS WILLIAMS","ADEBAYO BUKOLA","TOSIN ETUMUDO","KAREN ETUMUDO","JEMIMA ETUMUDO","UTITOFUN BASSEY","PRECIOUS BASSEY","VICTORY BASSEY","EVELYN UMOH","OZZOMA OZUEM","PRECIOUS OZUEM","ESTHER OZUEM","PATIENCE OZUEM","EUNICE OKAFOR","JOY OKAFOR","LOVE ASHIBOGWU","REBECCAH OLUGENTLE","PETRA OKERE","ADENEKAN ADEDOYIN","PATIENCE EKPEYONG","RITA AGEMA","PRECIOUS ABIODUN","FAVOUR ABIODUN","HANNAH ABIODUN","FAVOUR OSAWEME","FAITH OSAWEME","RAINA WILLIAMS","CHRISTIANA POLYCARP","NAOMI SAMSON","MONICA MESHACH","VIVIAN NYAKPO","UZOMA LOIS","CHIAMAKA ESIULO","MICHAEL KALU","JOEL OJEI","INTEGRITY ADEDIRAN","ABEL NWACHUKWU","AKINWALE FERNANDEZ","ADKOLE IDU","MATHEW UKATO","MAYOWA OLUGENTLE","DANIEL OMADUDU","JOHN OKPOKPO","MAXWEL OKPOKPO","DANIEL MONYE","DAMILARE LAWAL","GODWIN ESIULO","BRIGHT ESIULO","TIMOFE ASHIBOGWU","DAVID ESIULO","GEORGE AKO","EMEKA JUSTICE","AMOS MADUJEMU","COURAGE ETUMUDO","BENIAH ETUMUDO","MICHAEL BASSEY","EKPEYONG BASSEY","DIVINE OZUEM","BLESSING SAMSON","DOLA EKANEM","DOLU EKANEM","DUMININU EKANEM","JOEL OSAWEME","CHRISTIAN ADESHINA","ISSAC ADESHINA","DAVID CHIMAOBI","SUNDAY RAPHAEL","JACOB AGEMA","MICHAEL POLYCARP","JOSEPH APUAMAGA","ROYALTY OKERE","RICHARD ABOSHEMI","GERALD GOKA","GOODNESS GOKA","WISDOM MESHACH","UWANNA MESHACH","PUAL ADEDIRAN","SEGUN ADEDIRAN","WILLIAMS OFIAVWE","NATHAN OMADUDU","MONDAY EDNIYI","GODWIN SAMSON"],
+    talks: ["MICHAEL KALU","JOEL OJEI","INTEGRITY ADEDIRAN","AKINWALE FERNANDEZ","ADKOLE IDU","COURAGE ETUMUDO","JOHN OKPOKPO","MAXWEL OKPOKPO","DANIEL MONYE","GODWIN ESIULO","BRIGHT ESIULO","TIMOFE ASHIBOGWU","GEORGE AKO","AMOS MADUJEMU","MICHAEL BASSEY","EKPEYONG BASSEY","BLESSING SAMSON","JOEL OSAWEME","ISSAC ADESHINA","DAVID CHIMAOBI","MICHAEL POLYCARP","GERALD GOKA","GOODNESS GOKA"],
+    cbs_reader: ["NATHAN OMADUDU","JOEL OJEI","INTEGRITY ADEDIRAN","CHONOSO EKESI","DANIEL OMADUDU","ISSAC ADESHINA","GERALD GOKA"],
+    closing_prayer: ["NELSON OJEI","MICHAEL SAMSON","SEGUN ADEDIRAN","MARTINS ABIOLA","WILLIAMS UNA","CHONOSO EKESI","MICHAEL ADEDAYO","WILLIAMS OFIAVWE"]
+  }
+};
+
+const ROLES = [
+  {key:'ministerial_servant', label:'Ministerial Servant', short:'Min.Servant',   icon:'ti-award',      bg:'#EFF6FF', tc:'#1D4ED8', parts:[1]},
+  {key:'elder',               label:'Elder',               short:'Elder',         icon:'ti-crown',       bg:'#EFF6FF', tc:'#1D4ED8', parts:[1,10,12]},
+  {key:'chairman',            label:'Chairman',            short:'Chairman',      icon:'ti-podium',      bg:'#EFF6FF', tc:'#1D4ED8', parts:[1,12]},
+  {key:'treasures_digging',   label:'Treasures / Digging', short:'Treasures',     icon:'ti-diamond',     bg:'#FEF3C7', tc:'#D97706', parts:[2,3]},
+  {key:'bible_reading',       label:'Bible Reading',       short:'Bible Reading', icon:'ti-book-2',      bg:'#DCFCE7', tc:'#16A34A', parts:[4]},
+  {key:'apply_ministry',      label:'Apply to Ministry',   short:'Ministry',      icon:'ti-door',        bg:'#DCFCE7', tc:'#16A34A', parts:[5,6,7,8]},
+  {key:'talks',               label:'Talks',               short:'Talks',         icon:'ti-microphone',  bg:'#FEF3C7', tc:'#D97706', parts:[10]},
+  {key:'cbs_reader',          label:'CBS Reader',          short:'CBS Reader',    icon:'ti-school',      bg:'#FEF3C7', tc:'#D97706', parts:[11]},
+  {key:'closing_prayer',      label:'Closing Prayer',      short:'Closing Prayer',icon:'ti-hand-stop',   bg:'#FEE2E2', tc:'#DC2626', parts:[12]},
+];
+
+const SEC = {
+  TREASURES:  {label:'Treasures from God\'s Word',           color:'#1D4ED8'},
+  MINISTRY:   {label:'Apply Yourself to the Field Ministry', color:'#16A34A'},
+  CHRISTIANS: {label:'Living as Christians',                 color:'#D97706'}
+};
+
+const BASE = [
+  {n:1,  t:'Opening Song & Prayer | Opening Comments',      d:'1 min.',  s:'TREASURES', rk:'chairman'},
+  {n:2,  t:'Treasures from God\'s Word',                    d:'10 min.', s:'TREASURES', rk:'treasures_digging'},
+  {n:3,  t:'Spiritual Gems',                                d:'10 min.', s:'TREASURES', rk:'treasures_digging'},
+  {n:4,  t:'Bible Reading',                                 d:'4 min.',  s:'TREASURES', rk:'bible_reading'},
+  {n:5,  t:'Starting a Conversation #1',                    d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry'},
+  {n:6,  t:'Starting a Conversation #2',                    d:'2 min.',  s:'MINISTRY',  rk:'apply_ministry'},
+  {n:7,  t:'Starting a Conversation #3',                    d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry'},
+  {n:8,  t:'Explaining Your Beliefs',                       d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry'},
+  {n:9,  t:'Midpoint Song',                                 d:'—',       s:'CHRISTIANS',rk:'NA'},
+  {n:10, t:'Living as Christians — Discussion',             d:'15 min.', s:'CHRISTIANS',rk:'talks'},
+  {n:11, t:'Congregation Bible Study',                      d:'30 min.', s:'CHRISTIANS',rk:'cbs_reader'},
+  {n:12, t:'Concluding Comments | Closing Song & Prayer',   d:'3 min.',  s:'CHRISTIANS',rk:'closing_prayer'},
+];
+
+const LIVE = {'2026-05-28':{wr:'May 25–31, 2026',sc:'Isaiah 65–66',os:24,ms:80,cs:55,parts:[
+  {n:1, t:'Song 24 and Prayer | Opening Comments',            d:'1 min.',  s:'TREASURES', rk:'chairman',         dt:''},
+  {n:2, t:'We Love Our Spiritual Paradise!',                  d:'10 min.', s:'TREASURES', rk:'treasures_digging',dt:'Isa 65:13-25'},
+  {n:3, t:'Spiritual Gems',                                   d:'10 min.', s:'TREASURES', rk:'treasures_digging',dt:'Isa 66:24'},
+  {n:4, t:'Bible Reading — Isa 65:17-25',                     d:'4 min.',  s:'TREASURES', rk:'bible_reading',    dt:'th study 10'},
+  {n:5, t:'Starting a Conversation — Informal Witnessing',    d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry',   dt:'lmd lesson 5 pt 3'},
+  {n:6, t:'Starting a Conversation — Public Witnessing',      d:'2 min.',  s:'MINISTRY',  rk:'apply_ministry',   dt:'lmd lesson 4 pt 5'},
+  {n:7, t:'Starting a Conversation — House to House',         d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry',   dt:'lmd lesson 1 pt 4'},
+  {n:8, t:'Explaining Your Beliefs — Who Is the Antichrist?', d:'3 min.',  s:'MINISTRY',  rk:'apply_ministry',   dt:'th study 17'},
+  {n:9, t:'Song 80',                                          d:'—',       s:'CHRISTIANS',rk:'NA',               dt:''},
+  {n:10,t:'Are You Missing Out?',                             d:'15 min.', s:'CHRISTIANS',rk:'talks',            dt:'Discussion'},
+  {n:11,t:'Congregation Bible Study',                         d:'30 min.', s:'CHRISTIANS',rk:'cbs_reader',       dt:'lfb lessons 88-89'},
+  {n:12,t:'Concluding Comments | Song 55 and Prayer',         d:'3 min.',  s:'CHRISTIANS',rk:'closing_prayer',   dt:''},
+]}};
+
+const SCRIP = ['Isaiah 1-2','Isaiah 3-5','Isaiah 6-8','Isaiah 9-11','Isaiah 12-14','Isaiah 15-18','Isaiah 19-22','Isaiah 23-25','Isaiah 26-28','Isaiah 29-31','Isaiah 32-35','Isaiah 36-39','Isaiah 40-42','Isaiah 43-46','Isaiah 47-50','Isaiah 51-53','Isaiah 54-57','Isaiah 58-61','Isaiah 62-64','Isaiah 65-66','Jeremiah 1-2','Jeremiah 3-5','Jeremiah 6-9','Jeremiah 10-13','Jeremiah 14-16','Jeremiah 17-20','Jeremiah 21-25','Jeremiah 26-29','Jeremiah 30-33','Jeremiah 34-38','Jeremiah 39-43','Jeremiah 44-48','Jeremiah 49-52','Ezekiel 1-3','Ezekiel 4-7','Ezekiel 8-11','Ezekiel 12-15','Ezekiel 16-19','Ezekiel 20-23','Ezekiel 24-27','Ezekiel 28-31','Ezekiel 32-35','Ezekiel 36-39','Ezekiel 40-43','Ezekiel 44-48','Daniel 1-3','Daniel 4-6','Daniel 7-9','Daniel 10-12','Hosea 1-7','Hosea 8-14','Joel 1-3'];
+
+const K = {P:'otun_p_v12',A:'otun_a_v12',R:'otun_r_v12',AS:'otun_as_v12',S:'otun_s_v12'};
+let pools={}, avail={}, rot={}, asgns={}, scheds={}, curIdx=0;
+
+function defPools(data){ const d=data||FALLBACK; const p={}; ROLES.forEach(r=>{p[r.key]=[...new Set(d.roles[r.key]||[])]}); return p; }
+function load(){
+  try{
+    const sp=localStorage.getItem(K.P); pools=sp?JSON.parse(sp):defPools();
+    avail=JSON.parse(localStorage.getItem(K.A)||'{}');
+    rot=JSON.parse(localStorage.getItem(K.R)||'{}');
+    asgns=JSON.parse(localStorage.getItem(K.AS)||'{}');
+    scheds=JSON.parse(localStorage.getItem(K.S)||'{}');
+    Object.assign(scheds,LIVE);
+  }catch(e){pools=defPools();avail={};rot={};asgns={};scheds=JSON.parse(JSON.stringify(LIVE));}
+}
+function save(){
+  try{
+    localStorage.setItem(K.P,JSON.stringify(pools));
+    localStorage.setItem(K.A,JSON.stringify(avail));
+    localStorage.setItem(K.R,JSON.stringify(rot));
+    localStorage.setItem(K.AS,JSON.stringify(asgns));
+    const s2={}; Object.keys(scheds).filter(k=>!LIVE[k]).forEach(k=>s2[k]=scheds[k]);
+    localStorage.setItem(K.S,JSON.stringify(s2));
+  }catch(e){}
+}
+
+async function reloadGH(){
+  const ban=document.getElementById('gh-banner');
+  ban.className='banner banner-info';
+  ban.innerHTML='<span class="sp"></span> Syncing from GitHub — martinsabiola/otun-rd-lms-data/names.json...';
+  try{
+    const r=await fetch(GH_URL+'?t='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    ROLES.forEach(rr=>{ if(data.roles&&data.roles[rr.key]) pools[rr.key]=[...new Set(data.roles[rr.key])]; });
+    const ghE=data.roles.elder||FALLBACK.roles.elder;
+    const ghM=data.roles.ministerial_servant||FALLBACK.roles.ministerial_servant;
+    pools.treasures_digging=[...new Set([...ghE,...ghM])];
+    save();
+    const now=new Date().toLocaleTimeString();
+    ban.className='banner banner-success';
+    ban.innerHTML='<i class="ti ti-circle-check"></i> ✓ Names loaded from GitHub — '+now+' &nbsp;<button onclick="this.parentElement.style.display=\'none\'" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:16px">×</button>';
+    const el=document.getElementById('gh-sync-time'); if(el) el.textContent=now;
+    TH.forEach(t=>{const k=dk(t);if(!asgns[k])autoAsgn(t);}); updStats(); renderWk(false);
+    if(document.getElementById('panel-names').classList.contains('active')) renderPools();
+  }catch(e){
+    ban.className='banner banner-warning';
+    ban.innerHTML='<i class="ti ti-alert-circle"></i> GitHub sync failed — using built-in data. ('+e.message+') &nbsp;<button onclick="this.parentElement.style.display=\'none\'" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:16px">×</button>';
+    TH.forEach(t=>{const k=dk(t);if(!asgns[k])autoAsgn(t);}); updStats(); renderWk(false);
+  }
+}
+
+function getThurs(){const o=[];const d=new Date(2026,0,1);while(d.getDay()!==4)d.setDate(d.getDate()+1);while(d.getFullYear()===2026){o.push(new Date(d));d.setDate(d.getDate()+7);}return o;}
+const TH=getThurs();
+function dk(d){return d.toISOString().slice(0,10);}
+function fmtR(t){const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const e=new Date(t);e.setDate(t.getDate()+6);return`${M[t.getMonth()]} ${t.getDate()}–${e.getMonth()!==t.getMonth()?M[e.getMonth()]+' ':''}${e.getDate()}, ${t.getFullYear()}`;}
+function parts4(key){return(scheds[key]&&scheds[key].parts)||BASE;}
+function role4(rk){return ROLES.find(r=>r.key===rk)||null;}
+function poolAv(rk){return(pools[rk]||[]).filter(n=>avail[rk+'::'+n]!==false);}
+function nxt(rk){const av=poolAv(rk);if(!av.length)return'';const i=(rot[rk]||0)%av.length;rot[rk]=(i+1)%av.length;save();return av[i];}
+function autoAsgn(thu){const key=dk(thu);if(!asgns[key])asgns[key]={};parts4(key).forEach(p=>{if(p.rk==='NA')return;if(!asgns[key][p.n])asgns[key][p.n]=nxt(p.rk);});save();}
+function defSched(thu){const wi=TH.findIndex(t=>dk(t)===dk(thu));const M=['January','February','March','April','May','June','July','August','September','October','November','December'];const d=thu.getDate();const e=new Date(thu);e.setDate(d+6);const re=e.getMonth()!==thu.getMonth()?`${M[e.getMonth()]} ${e.getDate()}`:String(e.getDate());return{wr:`${M[thu.getMonth()]} ${d}–${re}, ${thu.getFullYear()}`,sc:SCRIP[wi%SCRIP.length],os:Math.floor(Math.random()*150)+1,ms:Math.floor(Math.random()*150)+1,cs:Math.floor(Math.random()*150)+1,parts:BASE.map(p=>({...p,dt:''}));};}
+
+async function fetchAI(){
+  const thu=TH[curIdx];const key=dk(thu);
+  if(LIVE[key]){renderWk(false);return;}
+  const btn=document.getElementById('fetch-btn');
+  btn.innerHTML='<span class="sp"></span> Fetching...';btn.disabled=true;renderWk(true);
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,system:'Return only valid compact JSON, no markdown.',messages:[{role:'user',content:`JW.org 2026 Life and Ministry Meeting for ${thu.toDateString()}. Exactly 12 parts. rk values: chairman,treasures_digging,bible_reading,apply_ministry,NA,talks,cbs_reader,closing_prayer. Return ONLY JSON: {"wr":"...","sc":"...","os":0,"ms":0,"cs":0,"parts":[{"n":1,"t":"Song N and Prayer | Opening Comments","d":"1 min.","s":"TREASURES","rk":"chairman","dt":""},{"n":2,"t":"[talk title]","d":"10 min.","s":"TREASURES","rk":"treasures_digging","dt":"[refs]"},{"n":3,"t":"Spiritual Gems","d":"10 min.","s":"TREASURES","rk":"treasures_digging","dt":""},{"n":4,"t":"Bible Reading — [range]","d":"4 min.","s":"TREASURES","rk":"bible_reading","dt":""},{"n":5,"t":"Starting a Conversation — Informal","d":"3 min.","s":"MINISTRY","rk":"apply_ministry","dt":""},{"n":6,"t":"Starting a Conversation — Public","d":"2 min.","s":"MINISTRY","rk":"apply_ministry","dt":""},{"n":7,"t":"Starting a Conversation — House to House","d":"3 min.","s":"MINISTRY","rk":"apply_ministry","dt":""},{"n":8,"t":"Explaining Your Beliefs — [topic]","d":"3 min.","s":"MINISTRY","rk":"apply_ministry","dt":""},{"n":9,"t":"Song N","d":"—","s":"CHRISTIANS","rk":"NA","dt":""},{"n":10,"t":"[LAC title]","d":"15 min.","s":"CHRISTIANS","rk":"talks","dt":"Discussion"},{"n":11,"t":"Congregation Bible Study","d":"30 min.","s":"CHRISTIANS","rk":"cbs_reader","dt":"lfb lessons N-N"},{"n":12,"t":"Concluding Comments | Song N and Prayer","d":"3 min.","s":"CHRISTIANS","rk":"closing_prayer","dt":""}]}`}]})});
+    const data=await r.json();
+    let txt=data.content.map(c=>c.text||'').join('').trim().replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(txt);
+    if(parsed.parts&&parsed.parts.length===12)scheds[key]=parsed;else scheds[key]=defSched(thu);
+  }catch(e){scheds[key]=defSched(thu);}
+  if(!asgns[key])autoAsgn(thu);
+  save();btn.innerHTML='<i class="ti ti-refresh"></i> Fetch JW.org';btn.disabled=false;
+  renderWk(false);updStats();
+}
+
+function renderWk(loading){
+  const thu=TH[curIdx];const key=dk(thu);const sc=scheds[key];const ag=asgns[key]||{};
+  document.getElementById('wklbl').textContent=sc?`${sc.wr} · ${sc.sc}`:fmtR(thu);
+  if(!sc){document.getElementById('wk-container').innerHTML=`<div class="card"><div class="lr">${loading?'<span class="sp"></span> Fetching...':'Click "Fetch JW.org" to load this week'}</div></div>`;return;}
+  const pts=sc.parts||BASE;let h=`<div class="card">`;
+  h+=`<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px">`;
+  h+=`<div><div style="font-size:16px;font-weight:700;color:var(--text)">${sc.wr}</div>`;
+  h+=`<div style="font-size:12px;color:var(--text-secondary);margin-top:4px"><i class="ti ti-book-2"></i> ${sc.sc} &nbsp;·&nbsp; <i class="ti ti-music"></i> Songs ${sc.os}, ${sc.ms||'—'} & ${sc.cs}${LIVE[key]?' <span class="badge b-green" style="font-size:10px">✓ verified</span>':''}</div></div>`;
+  h+=`<div style="display:flex;gap:6px;flex-shrink:0"><button onclick="autoRe('${key}')" class="btn btn-outline btn-sm"><i class="ti ti-rotate"></i> Auto</button><button onclick="confAll('${key}')" class="btn btn-success btn-sm"><i class="ti ti-check"></i> Confirm</button></div></div>`;
+  let ls='';
+  pts.forEach(p=>{
+    const sm=SEC[p.s]||SEC.TREASURES;
+    if(p.s!==ls){h+=`<div class="sec-header" style="color:${sm.color}">${sm.label}</div>`;ls=p.s;}
+    const rl=role4(p.rk);const nb=rl?rl.bg:'#F9FAFB';const nt=rl?rl.tc:'#6B7280';
+    const cur=ag[p.n]||'';const pNames=pools[p.rk]||[];
+    const isTr=p.rk==='treasures_digging';
+    const elders=pools.elder||[];const ms=pools.ministerial_servant||[];
+    h+=`<div class="prow"><div class="pnum" style="background:${nb};color:${nt}">${p.n}</div>`;
+    h+=`<div style="min-width:0"><div class="ptitle">${p.t||''}</div><div class="pmeta">${p.d||''}${(p.dt&&p.dt.trim())?' · '+p.dt:''}`;
+    if(rl)h+=`<span class="stag" style="background:${nb};color:${nt}">${rl.short}</span>`;
+    if(isTr)h+=`<span class="stag" style="background:#EFF6FF;color:#1D4ED8">Elders+MS</span>`;
+    h+=`</div></div>`;
+    if(p.rk==='NA'){h+=`<div style="grid-column:3/5;font-size:12px;color:var(--text-secondary);text-align:right">—</div>`;}
+    else{
+      h+=`<select class="asel ${cur?'con':'unc'}" onchange="setAg('${key}',${p.n},this.value,this)" data-week="${key}" data-part="${p.n}">`;
+      if(!cur)h+=`<option value="">— Assign —</option>`;
+      pNames.forEach(nm=>{
+        const isE=isTr&&elders.includes(nm);const isM=isTr&&ms.includes(nm);
+        h+=`<option value="${nm}"${cur===nm?' selected':''}>${isTr?(isE?'[E] ':isM?'[MS] ':''):''}${nm}</option>`;
+      });
+      h+=`<option value="unknown">⚠ Unknown</option></select>`;
+      h+=`<button class="ib" onclick="qNotify('${key}',${p.n})" title="Send notification"><i class="ti ti-bell"></i></button>`;
+    }
+    h+=`</div>`;
+  });
+  h+=`</div>`;document.getElementById('wk-container').innerHTML=h;updBadge();
+}
+
+function setAg(wk,pn,val,sel){if(!asgns[wk])asgns[wk]={};asgns[wk][pn]=val;if(sel)sel.className='asel '+(val&&val!=='unknown'?'con':'unc');save();updStats();updBadge();}
+function autoRe(key){asgns[key]={};const t=TH.find(x=>dk(x)===key);if(t)autoAsgn(t);renderWk(false);}
+function confAll(key){document.querySelectorAll(`[data-week="${key}"]`).forEach(s=>{if(s.value&&s.value!=='unknown')s.className='asel con';});}
+function prevW(){if(curIdx>0){curIdx--;navUpd();}}
+function nextW(){if(curIdx<TH.length-1){curIdx++;navUpd();}}
+function navUpd(){const key=dk(TH[curIdx]);if(!asgns[key])autoAsgn(TH[curIdx]);renderWk(false);if(!scheds[key])fetchAI();}
+
+function renderPools(){
+  const total=[...new Set(ROLES.flatMap(r=>(pools[r.key]||[])))].length;
+  const tn=document.getElementById('total-names-text');if(tn)tn.textContent=total;
+  const tb=document.getElementById('total-names-badge');if(tb)tb.textContent=total+' members';
+  let h='';
+  ROLES.forEach(role=>{
+    const nl=pools[role.key]||[];const ac=nl.filter(n=>avail[role.key+'::'+n]!==false).length;
+    const isTr=role.key==='treasures_digging';const elders=pools.elder||[];const ms=pools.ministerial_servant||[];
+    h+=`<div class="role-card">`;
+    h+=`<div class="role-header" style="background:${role.bg}">`;
+    h+=`<div class="role-icon" style="background:${role.bg};color:${role.tc}"><i class="ti ${role.icon}"></i></div>`;
+    h+=`<div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">${role.label}${isTr?`<span class="stag" style="background:#EFF6FF;color:#1D4ED8">Elders + Min. Servants</span>`:''}</div>`;
+    h+=`<div style="font-size:12px;color:var(--text-secondary)">Parts ${role.parts.join(', ')} &nbsp;·&nbsp; ${ac}/${nl.length} active</div></div>`;
+    h+=`<span class="badge" style="background:${role.bg};color:${role.tc}">${nl.length} names</span></div>`;
+    h+=`<div class="role-body">`;
+    if(!nl.length){h+=`<div style="font-size:13px;color:var(--text-secondary);padding:8px 0">No names yet — add below.</div>`;}
+    nl.forEach(name=>{
+      const avKey=role.key+'::'+name;const active=avail[avKey]!==false;
+      const cnt=Object.values(asgns).reduce((a,wk)=>a+Object.values(wk).filter(v=>v===name).length,0);
+      const ini=name.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+      const isE=isTr&&elders.includes(name);const isM=isTr&&ms.includes(name);
+      h+=`<div class="name-row"><div class="name-av" style="background:${role.bg};color:${role.tc}">${ini}</div>`;
+      h+=`<div style="flex:1;font-size:13px;color:var(--text)">${name}`;
+      if(isE)h+=`<span class="stag" style="background:#EFF6FF;color:#1D4ED8">Elder</span>`;
+      if(isM)h+=`<span class="stag" style="background:#FEF3C7;color:#D97706">MS</span>`;
+      h+=`</div><div style="font-size:12px;color:var(--text-secondary);min-width:28px;text-align:right">${cnt}x</div>`;
+      h+=`<button class="tgl ${active?'on':'off'}" onclick="togName('${role.key}','${esc(name)}',this)" title="Toggle"><span class="tdot"></span></button>`;
+      h+=`<button class="ib del btn-sm" onclick="delName('${role.key}','${esc(name)}')" title="Delete"><i class="ti ti-trash"></i></button></div>`;
+    });
+    h+=`<div class="add-row"><input type="text" class="add-inp" id="ai-${role.key}" placeholder="Add name to ${role.label}..." onkeydown="if(event.key==='Enter')addName('${role.key}')">`;
+    h+=`<button class="btn btn-sm" style="background:${role.bg};color:${role.tc};border:1px solid ${role.bg}" onclick="addName('${role.key}')"><i class="ti ti-plus"></i> Add</button></div>`;
+    h+=`</div></div>`;
+  });
+  document.getElementById('pools-list').innerHTML=h;
+}
+
+function esc(s){return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function togName(rk,nm,btn){const k=rk+'::'+nm;avail[k]=avail[k]===false;btn.className='tgl '+(avail[k]===false?'off':'on');const dot=btn.querySelector('.tdot');if(dot){dot.style.left=avail[k]===false?'3px':'17px';}save();updStats();}
+function delName(rk,nm){if(!confirm(`Delete "${nm}" from ${rk} pool?`))return;pools[rk]=(pools[rk]||[]).filter(n=>n!==nm);delete avail[rk+'::'+nm];Object.keys(asgns).forEach(wk=>{parts4(wk).filter(p=>p.rk===rk).forEach(p=>{if(asgns[wk]&&asgns[wk][p.n]===nm)asgns[wk][p.n]='';});});save();renderPools();updStats();renderWk(false);}
+function addName(rk){const inp=document.getElementById('ai-'+rk);if(!inp)return;const val=inp.value.trim();if(!val)return;if(!pools[rk])pools[rk]=[];if(!pools[rk].includes(val))pools[rk].push(val);save();inp.value='';renderPools();updStats();}
+
+function renderNotifs(){
+  const thu=TH[curIdx];const key=dk(thu);const sc=scheds[key];const ag=asgns[key]||{};
+  const fmt=(document.getElementById('nfmt')||{}).value||'whatsapp';
+  const pts=sc?sc.parts:BASE;let h='';
+  pts.forEach(p=>{
+    if(p.rk==='NA')return;const person=ag[p.n];if(!person||person==='unknown')return;
+    const msg=bldMsg(thu,p.t||'',p.d||'',person,fmt);const rl=role4(p.rk);
+    const bg=rl?rl.bg:'#F9FAFB';const tc=rl?rl.tc:'#6B7280';
+    h+=`<div class="notif-item"><div class="notif-icon" style="background:${bg};color:${tc}"><i class="ti ti-user"></i></div>`;
+    h+=`<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;color:var(--text)">${person} <span class="badge b-blue" style="font-size:10px">Part ${p.n}</span>${rl?`<span class="stag" style="background:${bg};color:${tc}">${rl.short}</span>`:''}</div>`;
+    h+=`<div style="font-size:12px;color:var(--text-secondary);margin-top:3px">${p.t||''} · ${p.d||''}</div>`;
+    h+=`<details style="margin-top:8px"><summary style="font-size:12px;cursor:pointer;color:var(--text-secondary)">Preview message</summary>`;
+    h+=`<pre class="msg">${eH(msg)}</pre></details></div></div>`;
+  });
+  document.getElementById('notif-list').innerHTML=h||`<div class="lr">No assignments yet for this week.</div>`;
+}
+function eH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function bldMsg(thu,title,dur,nm,fmt){
+  const ds=thu.toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if(fmt==='whatsapp')return`*OTUN RD — Life & Ministry Meeting*\n\nDear *${nm}*,\n\nYou have been assigned a part:\n\n*Date:* ${ds}\n*Part:* ${title}\n*Duration:* ${dur}\n\nPlease prepare accordingly.\nMay Jehovah bless your effort!\n\n_OTUN RD Congregation_`;
+  if(fmt==='email')return`Subject: Meeting Part Assignment — ${ds}\n\nDear ${nm},\n\nDate: ${ds}\nPart: ${title}\nDuration: ${dur}\n\nPlease prepare well.\n\nWarm Christian love,\nOTUN RD Congregation`;
+  return`OTUN RD: Dear ${nm}, you have "${title}" (${dur}) on ${ds}. Please prepare. God bless!`;
+}
+function qNotify(wk,pn){
+  const person=asgns[wk]?.[pn];if(!person||person==='unknown'){alert('Please assign a name first.');return;}
+  const p=parts4(wk).find(x=>x.n===pn);const thu=TH.find(t=>dk(t)===wk);
+  const fmt=(document.getElementById('nfmt')||{}).value||'whatsapp';
+  alert(bldMsg(thu,p?.t||'',p?.d||'',person,fmt));
+}
+function updStats(){
+  const all=[...new Set(ROLES.flatMap(r=>(pools[r.key]||[]).filter(n=>avail[r.key+'::'+n]!==false)))].length;
+  const sn=document.getElementById('s-names');if(sn)sn.textContent=all;
+  const tb=document.getElementById('total-names-badge');if(tb)tb.textContent=all+' members';
+  let assigned=0,pending=0;
+  TH.forEach(t=>{const a=asgns[dk(t)]||{};parts4(dk(t)).forEach(p=>{if(p.rk==='NA')return;a[p.n]&&a[p.n]!==''?assigned++:pending++;});});
+  const sa=document.getElementById('s-assigned');if(sa)sa.textContent=assigned;
+  const sp=document.getElementById('s-pending');if(sp)sp.textContent=pending;
+  updBadge();
+}
+function updBadge(){
+  const key=dk(TH[curIdx]);const a=asgns[key]||{};
+  const p=parts4(key).filter(x=>x.rk!=='NA'&&(!a[x.n]||a[x.n]==='')).length;
+  const b=document.getElementById('pending-badge');if(b)b.innerHTML=`<i class="ti ti-clock"></i> ${p} pending`;
+}
+function renderYrList(){
+  let h='';
+  TH.forEach((t,i)=>{
+    const key=dk(t);const a=asgns[key]||{};const pts=parts4(key);
+    const tot=pts.filter(p=>p.rk!=='NA').length;const done=pts.filter(p=>p.rk!=='NA'&&a[p.n]&&a[p.n]!=='').length;
+    const pct=Math.round(done/tot*100);const isNow=i===curIdx;const isPast=t<new Date();const isLive=!!LIVE[key];
+    h+=`<div class="yr-row ${isNow?'current':''}" onclick="goWk(${i})">`;
+    h+=`<div style="width:28px;font-size:12px;color:var(--text-secondary);text-align:right;font-weight:600">${i+1}</div>`;
+    h+=`<div style="flex:1;font-size:13px;font-weight:${isNow?'700':'400'};color:${isNow?'var(--primary)':isPast?'var(--text-secondary)':'var(--text)'}">${fmtR(t)}${isLive?' <span class="badge b-green" style="font-size:9px">live</span>':''}</div>`;
+    h+=`<div><div class="pw"><div class="pb" style="width:${pct}%"></div></div><div style="font-size:10px;color:var(--text-secondary);text-align:right;margin-top:2px">${done}/${tot}</div></div>`;
+    h+=`<span class="badge ${pct===100?'b-green':pct>0?'b-amber':'b-red'}" style="font-size:10px;min-width:40px;justify-content:center">${pct}%</span></div>`;
+  });
+  document.getElementById('yr-list').innerHTML=h;
+}
+function goWk(i){curIdx=i;sw('schedule',document.querySelector('.tab'));navUpd();}
+function exportSched(){
+  const thu=TH[curIdx];const key=dk(thu);const sc=scheds[key];const ag=asgns[key]||{};const pts=sc?sc.parts:BASE;
+  let txt=`OTUN RD — Life & Ministry Meeting Schedule\n${sc?sc.wr:fmtR(thu)}\n`;
+  if(sc)txt+=`Scripture: ${sc.sc}\nSongs: ${sc.os}, ${sc.ms||'—'} & ${sc.cs}\n`;
+  txt+='='.repeat(54)+'\n';let ls='';
+  pts.forEach(p=>{
+    if(p.s!==ls){txt+=`\n▌ ${SEC[p.s]?.label||p.s}\n\n`;ls=p.s;}
+    const rl=role4(p.rk);
+    txt+=`Part ${p.n}: ${p.t||''}\n  Role    : ${rl?rl.label:'—'}\n  Duration: ${p.d||''}\n  Assigned: ${ag[p.n]||'UNASSIGNED'}\n\n`;
+  });
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download=`OTUN_RD_LMS_${key}.txt`;a.click();
+}
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');if(btn)btn.classList.add('active');
+  if(id==='names')renderPools();
+  if(id==='notifications')renderNotifs();
+  if(id==='overview'){updStats();renderYrList();}
+}
+
+// INIT
+load();
+const today=new Date();
+const ni=TH.findIndex(t=>{const d=(t-today)/864e5;return d>=-3&&d<=7;});
+curIdx=ni>=0?ni:Math.max(0,TH.findIndex(t=>t>=today));
+TH.forEach(t=>{const key=dk(t);if(!asgns[key])autoAsgn(t);});
+updStats();
+reloadGH(); // auto-fetch from GitHub on load
+</script>
+</body>
+</html>

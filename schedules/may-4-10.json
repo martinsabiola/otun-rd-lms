@@ -9,108 +9,132 @@
   },
   "parts": [
     {
-      "number": 1,
+      "number": 0,
       "title": "Song 21 and Prayer | Opening Comments",
       "duration": "1 min.",
-      "section": "TREASURES",
+      "section": "OPENING",
       "role": "chairman",
-      "assignee": null
+      "assignee": "NELSON OJEI"
     },
     {
-      "number": 2,
+      "section_header": "TREASURES FROM GOD'S WORD",
+      "section_role": "Chairman",
+      "section_assignee": "NELSON OJEI"
+    },
+    {
+      "number": 1,
       "title": "Fully Experience Jehovah's Blessing",
       "duration": "10 min.",
       "section": "TREASURES",
       "role": "treasures_digging",
-      "assignee": null
+      "assignee": "MICHAEL ADEDAYO"
     },
     {
-      "number": 3,
+      "number": 2,
       "title": "Spiritual Gems",
       "duration": "10 min.",
       "section": "TREASURES",
       "role": "treasures_digging",
       "note": "Isa 59:11 — In what sense did the Israelites 'Keep growling like bears'? (it 'Bear' ° 6)",
-      "assignee": null
+      "assignee": "MICHAEL SAMSON"
     },
     {
-      "number": 4,
+      "number": 3,
       "title": "Bible Reading",
       "duration": "4 min.",
       "section": "TREASURES",
       "role": "bible_reading",
       "scripture": "Isa 59:1-12",
       "note": "th study 10",
-      "assignee": null
+      "assignee": "INTEGRITY ADEDIRAN"
     },
     {
-      "number": 5,
-      "title": "Starting a Conversation — House to House",
+      "section_header": "APPLY YOURSELF TO THE FIELD MINISTRY",
+      "section_color": "green"
+    },
+    {
+      "number": 4,
+      "title": "Starting a Conversation",
       "duration": "3 min.",
       "section": "MINISTRY",
       "role": "apply_ministry",
+      "context": "HOUSE TO HOUSE",
       "note": "Use a tract to start a conversation. (lmd lesson 1 point 5)",
-      "assignee": null
+      "assignee": "ONOME OJEI",
+      "assistant": "JOAN OJEI"
     },
     {
-      "number": 6,
-      "title": "Starting a Conversation — Informal Witnessing",
+      "number": 5,
+      "title": "Starting a Conversation",
       "duration": "4 min.",
       "section": "MINISTRY",
       "role": "apply_ministry",
+      "context": "INFORMAL WITNESSING",
       "note": "Share a truth from appendix A of the Love People brochure. (lmd lesson 2 point 4)",
-      "assignee": null
+      "assignee": "BLESSING KALU",
+      "assistant": "CHINYERE SAMSON"
+    },
+    {
+      "number": 6,
+      "title": "Talk",
+      "duration": "5 min.",
+      "section": "MINISTRY",
+      "role": "talks",
+      "theme": "We Should Pray Often",
+      "reference": "lmd appendix A point 16 (th study 8)",
+      "assignee": "MICHAEL KALU"
+    },
+    {
+      "section_header": "LIVING AS CHRISTIANS",
+      "section_color": "orange"
     },
     {
       "number": 7,
-      "title": "Talk — 'Follow the Course of Hospitality'",
-      "duration": "5 min.",
-      "section": "CHRISTIANS",
-      "role": "talks",
-      "note": "Paul encouraged Christians to 'follow the course of hospitality.' (Ro 12:13; study note, nwtsty)",
-      "reference": "lmd appendix A point 16 — Theme: We Should Pray Often. (th study 8)",
-      "assignee": null
-    },
-    {
-      "number": 8,
       "title": "Song 100",
       "duration": "—",
       "section": "CHRISTIANS",
-      "role": "NA",
-      "assignee": null
+      "role": "NA"
     },
     {
-      "number": 9,
+      "number": 8,
       "title": "'Follow the Course of Hospitality' Discussion",
       "duration": "15 min.",
       "section": "CHRISTIANS",
       "role": "talks",
-      "assignee": null
+      "note": "Paul encouraged Christians to 'follow the course of hospitality.' (Ro 12:13; study note, nwtsty)",
+      "assignee": "JOEL OJEI"
     },
     {
-      "number": 10,
+      "number": 9,
       "title": "Congregation Bible Study",
       "duration": "30 min.",
       "section": "CHRISTIANS",
       "role": "cbs_reader",
       "reference": "lfb lessons 82-83",
-      "assignee": null
+      "assignee": "NATHAN OMADUDU"
     },
     {
-      "number": 11,
+      "number": 10,
       "title": "Congregation Bible Study Reader",
       "duration": "—",
       "section": "CHRISTIANS",
       "role": "cbs_reader",
-      "assignee": null
+      "assignee": "INTEGRITY ADEDIRAN"
+    },
+    {
+      "number": 11,
+      "title": "Song 42",
+      "duration": "—",
+      "section": "CHRISTIANS",
+      "role": "NA"
     },
     {
       "number": 12,
-      "title": "Song 42 | Concluding Prayer",
+      "title": "Concluding Prayer",
       "duration": "3 min.",
       "section": "CHRISTIANS",
       "role": "closing_prayer",
-      "assignee": null
+      "assignee": "CHONOSO EKESI"
     }
   ]
 }

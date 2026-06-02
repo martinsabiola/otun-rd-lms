@@ -1,0 +1,116 @@
+{
+  "date": "2026-05-04",
+  "week_range": "May 4-10, 2026",
+  "scripture": "Isaiah 58-59",
+  "songs": {
+    "opening": 21,
+    "midpoint": 100,
+    "closing": 42
+  },
+  "parts": [
+    {
+      "number": 1,
+      "title": "Song 21 and Prayer | Opening Comments",
+      "duration": "1 min.",
+      "section": "TREASURES",
+      "role": "chairman",
+      "assignee": null
+    },
+    {
+      "number": 2,
+      "title": "Fully Experience Jehovah's Blessing",
+      "duration": "10 min.",
+      "section": "TREASURES",
+      "role": "treasures_digging",
+      "assignee": null
+    },
+    {
+      "number": 3,
+      "title": "Spiritual Gems",
+      "duration": "10 min.",
+      "section": "TREASURES",
+      "role": "treasures_digging",
+      "note": "Isa 59:11 — In what sense did the Israelites 'Keep growling like bears'? (it 'Bear' ° 6)",
+      "assignee": null
+    },
+    {
+      "number": 4,
+      "title": "Bible Reading",
+      "duration": "4 min.",
+      "section": "TREASURES",
+      "role": "bible_reading",
+      "scripture": "Isa 59:1-12",
+      "note": "th study 10",
+      "assignee": null
+    },
+    {
+      "number": 5,
+      "title": "Starting a Conversation — House to House",
+      "duration": "3 min.",
+      "section": "MINISTRY",
+      "role": "apply_ministry",
+      "note": "Use a tract to start a conversation. (lmd lesson 1 point 5)",
+      "assignee": null
+    },
+    {
+      "number": 6,
+      "title": "Starting a Conversation — Informal Witnessing",
+      "duration": "4 min.",
+      "section": "MINISTRY",
+      "role": "apply_ministry",
+      "note": "Share a truth from appendix A of the Love People brochure. (lmd lesson 2 point 4)",
+      "assignee": null
+    },
+    {
+      "number": 7,
+      "title": "Talk — 'Follow the Course of Hospitality'",
+      "duration": "5 min.",
+      "section": "CHRISTIANS",
+      "role": "talks",
+      "note": "Paul encouraged Christians to 'follow the course of hospitality.' (Ro 12:13; study note, nwtsty)",
+      "reference": "lmd appendix A point 16 — Theme: We Should Pray Often. (th study 8)",
+      "assignee": null
+    },
+    {
+      "number": 8,
+      "title": "Song 100",
+      "duration": "—",
+      "section": "CHRISTIANS",
+      "role": "NA",
+      "assignee": null
+    },
+    {
+      "number": 9,
+      "title": "'Follow the Course of Hospitality' Discussion",
+      "duration": "15 min.",
+      "section": "CHRISTIANS",
+      "role": "talks",
+      "assignee": null
+    },
+    {
+      "number": 10,
+      "title": "Congregation Bible Study",
+      "duration": "30 min.",
+      "section": "CHRISTIANS",
+      "role": "cbs_reader",
+      "reference": "lfb lessons 82-83",
+      "assignee": null
+    },
+    {
+      "number": 11,
+      "title": "Congregation Bible Study Reader",
+      "duration": "—",
+      "section": "CHRISTIANS",
+      "role": "cbs_reader",
+      "assignee": null
+    },
+    {
+      "number": 12,
+      "title": "Song 42 | Concluding Prayer",
+      "duration": "3 min.",
+      "section": "CHRISTIANS",
+      "role": "closing_prayer",
+      "assignee": null
+    }
+  ]
+}

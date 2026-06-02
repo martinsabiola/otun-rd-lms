@@ -1,0 +1,100 @@
+{
+  "congregation": "OTUN RD",
+  "year": 2026,
+  "roles": {
+    "ministerial_servant": [
+      "NATHAN OMADUDU",
+      "MONDAY EDNIYI",
+      "GODWIN SAMSON"
+    ],
+    "elder": [
+      "NELSON OJEI",
+      "MICHAEL ADEDAYO",
+      "MICHAEL SAMSON",
+      "CHONOSO EKESI",
+      "SEGUN ADEDIRAN",
+      "MARTINS ABIOLA",
+      "WILLIAMS OFIAVWE",
+      "WILLIAMS UNA"
+    ],
+    "chairman": [
+      "NELSON OJEI",
+      "MICHAEL SAMSON",
+      "CHONOSO EKESI",
+      "WILLIAMS UNA",
+      "SEGUN ADEDIRAN"
+    ],
+    "treasures_digging": [
+      "NELSON OJEI",
+      "MICHAEL ADEDAYO",
+      "MICHAEL SAMSON",
+      "CHONOSO EKESI",
+      "SEGUN ADEDIRAN",
+      "MARTINS ABIOLA",
+      "WILLIAMS OFIAVWE",
+      "WILLIAMS UNA",
+      "NATHAN OMADUDU",
+      "MONDAY EDNIYI",
+      "GODWIN SAMSON"
+    ],
+    "bible_reading": [
+      "INTEGRITY ADEDIRAN",
+      "ABEL NWACHUKWU",
+      "AKINWALE FERNANDEZ",
+      "MATHEW UKATO",
+      "MAYOWA OLUGENTLE",
+      "DANIEL OMADUDU",
+      "MAXWEL OKPOKPO",
+      "DAMILARE LAWAL",
+      "BRIGHT ESIULO",
+      "TIMOFE ASHIBOGWU"
+    ],
+    "apply_ministry": [
+      "ONOME OJEI",
+      "JOAN OJEI",
+      "BLESSING KALU",
+      "CHINYERE SAMSON",
+      "ALEX IDU",
+      "MARIAM ADEDIRAN",
+      "KINDNESS ADEDIRAN",
+      "FUNKE LAWAL",
+      "RACHAEL LAWAL",
+      "BOLA OMIDINA",
+      "HAPINESS SAMSON",
+      "EUSTACE OGBEDE"
+    ],
+    "talks": [
+      "MICHAEL KALU",
+      "JOEL OJEI",
+      "INTEGRITY ADEDIRAN",
+      "AKINWALE FERNANDEZ",
+      "ADKOLE IDU",
+      "COURAGE ETUMUDO",
+      "JOHN OKPOKPO",
+      "MAXWEL OKPOKPO",
+      "DANIEL MONYE",
+      "GODWIN ESIULO",
+      "BRIGHT ESIULO",
+      "TIMOFE ASHIBOGWU"
+    ],
+    "cbs_reader": [
+      "NATHAN OMADUDU",
+      "JOEL OJEI",
+      "INTEGRITY ADEDIRAN",
+      "CHONOSO EKESI",
+      "DANIEL OMADUDU",
+      "ISSAC ADESHINA",
+      "GERALD GOKA"
+    ],
+    "closing_prayer": [
+      "NELSON OJEI",
+      "MICHAEL SAMSON",
+      "SEGUN ADEDIRAN",
+      "MARTINS ABIOLA",
+      "WILLIAMS UNA",
+      "CHONOSO EKESI",
+      "MICHAEL ADEDAYO",
+      "WILLIAMS OFIAVWE"
+    ]
+  }
+}
